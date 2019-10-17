@@ -1,0 +1,54 @@
+trigger:
+- master
+
+pr:
+- master
+
+jobs:
+  - job: "Ubuntu_18_04"
+    pool:
+      vmImage: 'ubuntu-18.04'
+    steps:
+      - task: CmdLine@2
+        displayName: 'Install dependencies from Ubuntu'
+        inputs:
+          script: |
+            sudo apt-get install libboost-program-options-dev libboost-filesystem-dev ninja-build
+      - task: CmdLine@2
+        displayName: 'Install Catch2'
+        inputs:
+          script: |
+            pwd
+            pushd /tmp
+            pwd
+            git clone https://github.com/catchorg/Catch2.git
+            pushd Catch2
+            cmake -Bbuild -H. -DBUILD_TESTING=OFF
+            sudo cmake --build build/ --target install
+            pwd
+            popd
+            pwd
+            popd
+            pwd
+      - task: CMake@1
+        displayName: 'Configure'
+        inputs:
+          workingDirectory: 'build'
+          cmakeArgs: '-DWITH_TESTS=ON -G Ninja ..'
+      - task: CmdLine@2
+        displayName: 'Build'
+        inputs:
+          script: 'cmake --build build/'
+      - task: CmdLine@2
+        displayName: 'Run tests'
+        inputs:
+          script: |
+            cd build
+            ctest --output-on-failure -T Test
+      - task: PublishTestResults@2
+        displayName: 'Upload results'
+        inputs:
+          testResultsFormat: cTest
+          testResultsFiles: build/Testing/*/Test.xml
+          mergeTestResults: true
+          failTaskOnFailedTests: true

@@ -35,7 +35,7 @@ TEST_CASE("Recreate a file", "[recreate]")
 
   auto target = tmpDirTarget.getPath() / "file_sample.dat";
   {
-    std::ofstream file(target);
+    std::ofstream file(target.string());
     file.close();
   }
 
