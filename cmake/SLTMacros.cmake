@@ -115,7 +115,7 @@ function(slt_add_executable _name)
   set(multiValueArgs SOURCES LINK)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-  add_executable(${_name})
+  add_executable(${_name} "")
 
   target_sources(${_name}
     PRIVATE
