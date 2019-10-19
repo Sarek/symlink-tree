@@ -1,7 +1,8 @@
 #pragma once
 
-#include <filesystem>
 #include <optional>
+
+#include <boost/filesystem.hpp>
 
 namespace slt {
 namespace testutils {
@@ -13,10 +14,10 @@ public:
   ~TempDirectory();
 
   bool hasPath();
-  std::filesystem::path getPath();
+  boost::filesystem::path getPath();
 
 private:
-  std::optional<std::filesystem::path> _path{};
+  std::optional<boost::filesystem::path> _path{};
 };
 
 }

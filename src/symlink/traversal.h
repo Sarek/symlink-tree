@@ -1,6 +1,7 @@
-#include <filesystem>
 #include <functional>
 #include <string>
+
+#include <boost/filesystem.hpp>
 
 #pragma once
 
@@ -13,7 +14,7 @@ namespace symlink {
  * @param[in] path The path to start traversing from
  * @param[in] callback The callback to execute
  */
-void traverse(const std::string& path, std::function<void(std::filesystem::path)> callback);
+void traverse(const std::string& path, std::function<void(boost::filesystem::path)> callback);
 
 /**
  * Recreate a filesystem entry in a different prefix.
@@ -28,9 +29,9 @@ void traverse(const std::string& path, std::function<void(std::filesystem::path)
  * 
  * @return \c true on success, \c false otherwise
  */
-bool recreate(const std::filesystem::path& link_prefix,
-              const std::filesystem::path& target_prefix,
-              const std::filesystem::path& target);
+bool recreate(const boost::filesystem::path& link_prefix,
+              const boost::filesystem::path& target_prefix,
+              const boost::filesystem::path& target);
 
 
 /**
@@ -41,7 +42,7 @@ bool recreate(const std::filesystem::path& link_prefix,
  * @param[in] link The path to create the symbolic link at.
  * @return \c true on success, \c false otherwise
  */
-bool create_symlink(const std::filesystem::path& target, const std::filesystem::path& link);
+bool create_symlink(const boost::filesystem::path& target, const boost::filesystem::path& link);
 
 }
 }
