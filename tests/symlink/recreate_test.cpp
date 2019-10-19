@@ -1,7 +1,7 @@
-#include <filesystem>
 #include <fstream>
 #include <iostream>
 
+#include <boost/filesystem.hpp>
 #include <catch2/catch.hpp>
 
 #include "TempDirectory.h"
@@ -17,13 +17,13 @@ TEST_CASE("Recreate a directory", "[recreate]")
   REQUIRE(tmpDirTarget.hasPath());
 
   auto target = tmpDirTarget.getPath() / "dir";
-  std::filesystem::create_directory(target);
+  boost::filesystem::create_directory(target);
 
   REQUIRE(symlink::recreate(tmpDirLink.getPath(), tmpDirTarget.getPath(), target));
 
   auto link = tmpDirLink.getPath() / "dir";
-  REQUIRE(std::filesystem::exists(link));
-  REQUIRE(std::filesystem::is_directory(link));
+  REQUIRE(boost::filesystem::exists(link));
+  REQUIRE(boost::filesystem::is_directory(link));
 }
 
 TEST_CASE("Recreate a file", "[recreate]")
@@ -43,6 +43,6 @@ TEST_CASE("Recreate a file", "[recreate]")
 
   auto link = tmpDirLink.getPath() / "file_sample.dat";
 
-  REQUIRE(std::filesystem::exists(link));
-  REQUIRE(std::filesystem::is_symlink(link));
+  REQUIRE(boost::filesystem::exists(link));
+  REQUIRE(boost::filesystem::is_symlink(link));
 }

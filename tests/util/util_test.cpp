@@ -5,12 +5,12 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <optional>
 #include <string>
 
+#include <boost/filesystem.hpp>
 #include <catch2/catch.hpp>
 
 #include "util.h"
@@ -18,6 +18,7 @@
 
 using namespace slt;
 using namespace slt::util;
+namespace fs = boost::filesystem;
 
 TEST_CASE("Removing prefixes from strings", "[remove_prefix]")
 {
@@ -47,18 +48,18 @@ TEST_CASE("Copying ownership from one file to another", "[copy_ownership]")
   auto sourcePath = tmpDir.getPath() / "sourcefile.dat";
   auto targetPath = tmpDir.getPath() / "targetfile.dat";
 
-  std::ofstream sourcefile(sourcePath);
+  std::ofstream sourcefile(sourcePath.string());
   sourcefile << "Some data";
   sourcefile.close();
 
-  std::ofstream targetfile(targetPath);
+  std::ofstream targetfile(targetPath.string());
   targetfile << "Some data";
   targetfile.close();
 
   errno = 0;
   REQUIRE(::chown(sourcePath.c_str(), uid, gid) == 0);
 
-  REQUIRE(copy_ownership(sourcePath, targetPath));
+  REQUIRE(copy_ownership(sourcePath.string(), targetPath.string()));
 
   struct stat targetStat;
   REQUIRE(stat(targetPath.c_str(), &targetStat) == 0);

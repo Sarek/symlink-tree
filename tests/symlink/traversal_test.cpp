@@ -1,8 +1,8 @@
-#include <filesystem>
 #include <fstream>
 #include <set>
 #include <string>
 
+#include <boost/filesystem.hpp>
 #include <catch2/catch.hpp>
 
 #include "TempDirectory.h"
@@ -12,13 +12,13 @@ using namespace slt;
 
 TEST_CASE("Traverse a directory tree", "[traversal]")
 {
-  namespace fs = std::filesystem;
+  namespace fs = boost::filesystem;
 
   // build a sample directory tree
   testutils::TempDirectory tmpDir;
   REQUIRE(tmpDir.hasPath());
 
-  std::set<std::string> paths;
+  std::set<fs::path> paths;
 
   auto path1 = tmpDir.getPath() / "a";
   auto path2 = tmpDir.getPath() / "a/b";
@@ -34,12 +34,13 @@ TEST_CASE("Traverse a directory tree", "[traversal]")
 
   fs::create_directory(path1);
   fs::create_directory(path2);
-  std::ofstream file1Stream(file1);
-  std::ofstream file2Stream(file2);
-  std::ofstream file3Stream(file3);
+  std::ofstream file1Stream(file1.string());
+  std::ofstream file2Stream(file2.string());
+  std::ofstream file3Stream(file3.string());
 
-  std::set<std::string> foundPaths;
-  symlink::traverse(tmpDir.getPath(), [&foundPaths](auto path)
+  std::set<fs::path> foundPaths;
+  std::string tmpDirString{tmpDir.getPath().string()};
+  symlink::traverse(tmpDirString, [&foundPaths](auto path)
     {
       foundPaths.insert(path);
     });

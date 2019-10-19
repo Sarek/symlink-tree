@@ -3,6 +3,7 @@ slt_add_test(SymlinkTest
     recreate_test.cpp
     traversal_test.cpp
   LINK
+    Boost::filesystem
     SLT::Tests::Utils
     SLT::Symlink
 )
