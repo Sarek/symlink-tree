@@ -37,32 +37,3 @@ TEST_CASE("Regression test", "[remove_prefix]")
   REQUIRE( remove_prefix("/tmp/rreocE", "/tmp/rreocE/file_sample.dat"));
 }
 
-TEST_CASE("Copying ownership from one file to another", "[copy_ownership]")
-{
-  constexpr uid_t uid = 32767;
-  constexpr gid_t gid = 32768;
-
-  testutils::TempDirectory tmpDir;
-  REQUIRE(tmpDir.hasPath());
-
-  auto sourcePath = tmpDir.getPath() / "sourcefile.dat";
-  auto targetPath = tmpDir.getPath() / "targetfile.dat";
-
-  std::ofstream sourcefile(sourcePath.string());
-  sourcefile << "Some data";
-  sourcefile.close();
-
-  std::ofstream targetfile(targetPath.string());
-  targetfile << "Some data";
-  targetfile.close();
-
-  errno = 0;
-  REQUIRE(::chown(sourcePath.c_str(), uid, gid) == 0);
-
-  REQUIRE(copy_ownership(sourcePath.string(), targetPath.string()));
-
-  struct stat targetStat;
-  REQUIRE(stat(targetPath.c_str(), &targetStat) == 0);
-  REQUIRE(targetStat.st_gid == gid);
-  REQUIRE(targetStat.st_uid == uid);
-}
