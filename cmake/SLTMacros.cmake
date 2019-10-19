@@ -11,6 +11,9 @@ include(CMakeParseArguments)
 #   [PUBLIC_LINKING
 #     Some::Library
 #     [Other::Library]]
+#   [PRIVATE_LINKING
+#     Private::Library
+#     [Other::Library]]
 #   [STATIC | SHARED]
 # )
 #
