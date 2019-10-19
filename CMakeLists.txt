@@ -7,7 +7,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 option(BUILD_TESTS "Build unit tests")
 
-find_package(Boost 1.67 COMPONENTS program_options REQUIRED)
+find_package(Boost 1.65 COMPONENTS program_options REQUIRED)
 
 include(CTest)
 include(SLTMacros)
